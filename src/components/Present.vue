@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Show Slides here</h1>
+        <h1>Show Slides here!</h1>
         <v-card class="mx-auto my-12" max-width="374" v-for="card in cards" v-bind:key="card.id">
         {{card.word}}
         </v-card>
