@@ -3,8 +3,11 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Present from "../components/Present.vue"
 import Category from "../components/Category.vue"
+import Slides from "../components/Slides.vue"
 
 Vue.use(VueRouter);
+
+Vue.component('Slides', Slides)
 
 const routes = [
   {

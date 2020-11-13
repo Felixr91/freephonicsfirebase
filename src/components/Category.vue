@@ -24,8 +24,8 @@ export default {
   }, 
   created() {
     let location = this.$route.params.id
-    console.log(location)
-    db.collection('presentations').where('category', '===', location).get().then(querySnapshot => {
+
+    db.collection('presentations').where("category", "==", location).get().then(querySnapshot => {
       querySnapshot.forEach(doc => {
         const data = {
           'id':  doc.id,

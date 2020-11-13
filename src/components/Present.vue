@@ -1,33 +1,62 @@
 <template>
-    <div>
+    <div class="container">
+
+      <div class="row">
         <h1>Show Slides here!</h1>
-        <v-card class="mx-auto my-12" max-width="374" v-for="card in cards" v-bind:key="card.id">
-        {{card.word}}
-        </v-card>
+      </div>
+
+      <div class="row">
+        <div class="col-12" v-for="slide in slides.slides_array" v-bind:key="slide.id">
+          <Slides></Slides>
+          <div class="aspect-outer" :style="{ 'background-color': slide.color }">
+            <div class="aspect-inner">
+              {{slide.word}}
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
     </div>
 </template>
 
 <script>
+
 
 import db from './firebaseInit'
 
 export default {
   data(){
     return{
-      slides: []
+      slides: {}
     }
   }, 
   created() {
-    db.collection('presentations').doc('slides').where('word_part_1', '===', this.$route.params.id).get().then(querySnapshot => {
+
+    console.log(this.$route.params.id)
+
+    db.collection('presentations').where("name", "==", this.$route.params.id).get().then(querySnapshot => {
       querySnapshot.forEach(doc => {
         const data = {
-          'full_word': doc.data().full_word,
-          'word_part_1': doc.data().word_part_1, 
-          'word_part_2': doc.data().word_part_2
+          'slides_array': doc.data().slides
         }
-        this.slides.push(data)
+        console.log(data)
+        this.slides = data
       })
     })
   }
 };
 </script>
+
+<style scoped>
+.aspect-outer{
+	width: 100%;
+	padding-bottom: 56.25%; /* 16:9 */
+	position: relative;
+}
+
+.aspect-inner{
+  position: absolute;
+	top: 0; bottom: 0; left: 0; right: 0;
+}
+</style>
