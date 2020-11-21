@@ -3,10 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import AllCategories from '@/components/AllCategories.vue'
+// import AllCategories from '@/components/AllCategories.vue'
 import CardCategory from '@/components/CardCategory.vue'
 
-Vue.component('AllCategories', AllCategories)
+
 Vue.component('CardCategory', CardCategory)
 
 Vue.config.productionTip = false;

@@ -1,22 +1,21 @@
 <template>
   <v-app>
     <div>
-    <v-app-bar
-      
-      dense
-      dark
-    >
-    
-      <v-toolbar-title>Freephonics</v-toolbar-title>
+      <v-app-bar dense>
+        
+        <router-link to="/">
+          <v-toolbar-title>Freephonics</v-toolbar-title>
+        </router-link>
 
-      <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
 
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon color="white" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-      
+        
 
-    </v-app-bar>
-  </div>
+      </v-app-bar>
+    </div>
+
 
     <!-- Drawer -->
     <v-navigation-drawer
@@ -33,21 +32,14 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item>
-            <v-list-item-title>Foo</v-list-item-title>
+          <v-list-item v-for="category in categories" v-bind:key="category.id">
+
+            <router-link v-bind:to="{name:'category', params: {id: category.name}}">
+              <v-list-item-title>{{category.name}}</v-list-item-title>
+            </router-link>
+
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-title>Bar</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Fizz</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-title>Buzz</v-list-item-title>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -84,49 +76,67 @@
 </template>
 
 <script>
-  export default {
-    name: "App",
-    data: () => ({
-      drawer: false,
-      group: null,
-      links: [
-        {
-          label: 'Home',
-          url: '/'
-        }, 
-        {
-          label: 'About', 
-          url: '/about'
-        }
-      ]
-    }),
-    watch: {
-      group () {
-        this.drawer = false
-      },
+
+import db from '@/components/firebaseInit'
+
+export default {
+  name: "App",
+  data: () => ({
+    categories: [],
+    drawer: false,
+    group: null,
+    links: [
+      {
+        label: 'Home',
+        url: '/'
+      }, 
+      {
+        label: 'About', 
+        url: '/about'
+      }
+    ]
+  }),
+  watch: {
+    group () {
+      this.drawer = false
     },
-
-    components: {
-
-    }
-  };
+  },
+  created() {
+    db.collection('categories').orderBy('name').get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        const data = {
+          'id':  doc.id,
+          'category_id': doc.data().category_id, 
+          'name': doc.data().name
+        }
+        this.categories.push(data)
+      })
+    })
+  }
+};
 </script>
 
 <style>
   h1, h2, h3, h4, h5, h6{
-    font-family: 'Baloo Tammudu 2', cursive;
+    font-family: 'Raleway', sans-serif;
   }
 
   .v-toolbar__title{
-    font-family: 'Baloo Tammudu 2', cursive;
+    font-family: 'Raleway', sans-serif;
     font-weight: 700;
+    letter-spacing: 1px;
+    color: white;
+  }
+
+  .v-toolbar__content{
+    background-color: #00127b91;
   }
 
   p{
     font-family: 'Lato', sans-serif;
   }
 
-  .v-app-bar {
+  .v-application--wrap {
     background: linear-gradient(-45deg, #ee7752, #ce4b7e, #23a6d5, #23d5ab);
     background-size: 400% 400%;
     animation: gradient 5s ease infinite;

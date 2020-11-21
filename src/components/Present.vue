@@ -2,15 +2,13 @@
     <div class="container">
 
       <div class="row">
-        <h1>Show Slides here!</h1>
-      </div>
-
-      <div class="row">
-        <div class="col-12" v-for="slide in slides.slides_array" v-bind:key="slide.id">
-          <Slides></Slides>
-          <div class="aspect-outer" :style="{ 'background-color': slide.color }">
+        <div class="col-12">
+          
+          <div class="aspect-outer" @click="nextCard()">
             <div class="aspect-inner">
-              {{slide.word}}
+              <div class="word" :style="{ 'color': slides.slides_array[0].color }">
+                {{slides.slides_array[0].word}}
+              </div>
             </div>
           </div>
           
@@ -28,13 +26,12 @@ import db from './firebaseInit'
 export default {
   data(){
     return{
-      slides: {}
+      slides: [], 
+      deckPosition: 0
     }
   }, 
   created() {
-
     console.log(this.$route.params.id)
-
     db.collection('presentations').where("name", "==", this.$route.params.id).get().then(querySnapshot => {
       querySnapshot.forEach(doc => {
         const data = {
@@ -44,6 +41,11 @@ export default {
         this.slides = data
       })
     })
+  }, 
+  methods:{
+    nextCard(){
+      this.deckPosition = deckPosition++
+    }
   }
 };
 </script>
@@ -53,10 +55,20 @@ export default {
 	width: 100%;
 	padding-bottom: 56.25%; /* 16:9 */
 	position: relative;
+  border-radius: 25px;
 }
 
 .aspect-inner{
   position: absolute;
 	top: 0; bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.word{
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 10vw;
 }
 </style>

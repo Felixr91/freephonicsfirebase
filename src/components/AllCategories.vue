@@ -1,6 +1,5 @@
 <template>
   <div class="all-categories">
-    <h1>Categories</h1>
 
     <v-card class="mx-auto my-12" max-width="374" v-for="category in categories" v-bind:key="category.id">
       
